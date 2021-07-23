@@ -1,0 +1,12 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.chart-container {
+    height: 50%;
+    width: 50%;
+    position: relative;
+}
