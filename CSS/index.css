@@ -11,7 +11,7 @@ html, body {
 }
 
 .container {
-    margin: 15% 0 0 0;
+    margin: 15% auto 0 auto;
     height: 50%;
     width: 50%;
 }

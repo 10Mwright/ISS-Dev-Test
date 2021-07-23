@@ -57,7 +57,3 @@ picasso.chart({
             }]
     }
 });
-
-var elem = document.getElementById('charting');
-
-console.log("Script Ran on element:");
