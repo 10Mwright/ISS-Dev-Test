@@ -1,10 +1,13 @@
+//https://www.sitepoint.com/ajaxjquery-getjson-simple-example/
+
+
 var data = [];
 
 $(document).ready(function(){
     $.getJSON("Resources/dev_test.dat", data, function(data){
         var dataStore = [];
 
-        $.each(data, function(key, val) {
+        $.each(data, function() {
             var total = 0;
 
             data.forEach(element => total += parseInt(element.sales));
