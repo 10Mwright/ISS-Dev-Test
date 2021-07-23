@@ -1,5 +1,9 @@
 //https://www.sitepoint.com/ajaxjquery-getjson-simple-example/
 
+/*
+    To-do:
+        - Work on calculating totals for each ifa
+*/
 
 var data = [];
 
@@ -10,7 +14,11 @@ $(document).ready(function(){
         $.each(data, function() {
             var total = 0;
 
-            data.forEach(element => total += parseInt(element.sales));
+            for(var i = 0; i < data.length; i++) {
+                if(data[i].ifa === "Orange Investments") {
+                    total += parseInt(data[i].sales);
+                }
+            }
             console.log("total:" + total);
         })
 
