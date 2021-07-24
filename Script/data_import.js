@@ -17,16 +17,37 @@ $(document).ready(function(){
 
         //Now need to run through each IFA, totalling up the sales for each
 
+        for(var i = 0; i < uniqueIFA.length; i++) {
+            var total = 0;
+
+            var currentIFAData = data.filter(function(obj) {
+                return obj.ifa === uniqueIFA[i][0];
+            });
+
+            //For each row for this IFA add to IFA's total
+            for(var j = 0; j < currentIFAData.length; j++) {
+                total += parseInt(currentIFAData[j].sales);
+            }
+
+            console.log("IFA TOTAL FOR " + uniqueIFA[i][0] + ": " + total);
+        }
+
+        /*
         $.each(data, function() {
             var total = 0;
 
-            for(var i = 0; i < data.length; i++) {
-                if(data[i].ifa === "Orange Investments") {
-                    total += parseInt(data[i].sales);
-                }
+            var currentIFAData = data.filter(function(obj) {
+                return obj.ifa = uniqueIFA[2][2];
+            });
+
+            console.log(uniqueIFA[2][0]);
+            console.log("IFA Data:" + currentIFAData);
+
+            for(var i = 0; i < currentIFAData.length; i++) {
+                total += parseInt(currentIFAData[i].sales);
             }
             console.log("total:" + total);
-        })
+        })*/
 
     })
     $.getJSON("Resources/dev_test.dat", function(data){
