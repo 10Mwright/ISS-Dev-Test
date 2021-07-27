@@ -23,9 +23,12 @@
     <div class="container" id="charting">
         <div class="chart-container" id="barchart"></div>
     </div>
+    <p id="output"></p>
 
-    <script src="Script/barchart.js"></script>
-    <script src="Script/data_import.js"></script>
+    <script>var data = []</script>
+    <script type="module" src="Script/data_import.js"></script>
+
+    <script type="module" src="Script/barchart.js"></script>
 </body>
 
 </html>

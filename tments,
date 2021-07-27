@@ -1,0 +1,277 @@
+[1mdiff --git a/Resources/dev_test.dat b/Resources/dev_test.dat[m
+[1mindex f8d7132..dae59c1 100644[m
+[1m--- a/Resources/dev_test.dat[m
+[1m+++ b/Resources/dev_test.dat[m
+[36m@@ -214,4 +214,16 @@[m
+   "ifa": "Orange Investments",[m
+   "fund": "Rest of World",[m
+   "sales": "18000"[m
+[32m+[m[32m}, {[m
+[32m+[m[32m  "id": 37,[m
+[32m+[m[32m  "year": "2017",[m
+[32m+[m[32m  "ifa": "test",[m
+[32m+[m[32m  "fund": "Rest of World",[m
+[32m+[m[32m  "sales": "15000"[m
+[32m+[m[32m}, {[m
+[32m+[m[32m  "id": 38,[m
+[32m+[m[32m  "year": "2017",[m
+[32m+[m[32m  "ifa": "test",[m
+[32m+[m[32m  "fund": "Rest of World",[m
+[32m+[m[32m  "sales": "18000"[m
+ }][m
+\ No newline at end of file[m
+[1mdiff --git a/Script/barchart.js b/Script/barchart.js[m
+[1mindex a0d8730..ccebf55 100644[m
+[1m--- a/Script/barchart.js[m
+[1m+++ b/Script/barchart.js[m
+[36m@@ -1,59 +1,62 @@[m
+[31m-picasso.chart({[m
+[31m-    element: document.getElementById('charting').querySelector('#barchart'),[m
+[31m-    data: [[m
+[31m-        {[m
+[31m-            type: 'bar',[m
+[31m-            data: [[m
+[31m-                ['Month', 'Sales'],[m
+[31m-                ['Jan', 1000],[m
+[31m-                ['Feb', 2000],[m
+[31m-                ['Mar', 4000],[m
+[31m-            ],[m
+[31m-        },[m
+[31m-    ],[m
+[31m-    settings: {[m
+[31m-        scales: {[m
+[31m-            y: {[m
+[31m-                data: {field: 'Sales'},[m
+[31m-                invert: true,[m
+[31m-                include: [0][m
+[31m-            },[m
+[31m-            c: {[m
+[31m-                data: {field: 'Sales'},[m
+[31m-                type: 'color'[m
+[31m-            },[m
+[31m-            t: {data: { extract: {field: 'Month'}}, padding: 0.3},[m
+[31m-        },[m
+[31m-        components: [[m
+[32m+[m[32msetTimeout(function () { //Delay to avoid undefined variable[m
+[32m+[m[32m    for(var i = 0; i < chartData[i].length; i++) {[m
+[32m+[m[32m        for(var z = 0; z < chartData.length; z++) {[m
+[32m+[m[32m          console.log(chartData[z][i]);[m
+[32m+[m[32m        }[m
+[32m+[m[32m      }[m
+[32m+[m
+[32m+[m[32m    picasso.chart({[m
+[32m+[m[32m        element: document.getElementById('charting').querySelector('#barchart'),[m
+[32m+[m[32m        data: [[m
+             {[m
+[31m-                type: 'axis',[m
+[31m-                scale: 'y',[m
+[31m-                dock: 'left'[m
+[32m+[m[32m                type: 'bar',[m
+[32m+[m[32m                data: chartData,[m
+             },[m
+[31m-            {[m
+[31m-                type: 'axis',[m
+[31m-                scale: 't',[m
+[31m-                dock: 'bottom'[m
+[32m+[m[32m        ],[m
+[32m+[m[32m        settings: {[m
+[32m+[m[32m            scales: {[m
+[32m+[m[32m                y: {[m
+[32m+[m[32m                    data: { field: 'Sales' },[m
+[32m+[m[32m                    invert: true,[m
+[32m+[m[32m                    include: [0][m
+[32m+[m[32m                },[m
+[32m+[m[32m                c: {[m
+[32m+[m[32m                    data: { field: 'Sales' },[m
+[32m+[m[32m                    type: 'color'[m
+[32m+[m[32m                },[m
+[32m+[m[32m                t: { data: { extract: { field: 'IFA' } }, padding: 0.3 },[m
+             },[m
+[31m-            {[m
+[31m-                key: 'bars',[m
+[31m-                type: 'box',[m
+[31m-                data: {[m
+[31m-                    extract: {[m
+[31m-                        field: 'Month',[m
+[31m-                        props: {[m
+[31m-                            start: 0,[m
+[31m-                            end: {field: 'Sales'}[m
+[31m-                        }[m
+[31m-                    }[m
+[32m+[m[32m            components: [[m
+[32m+[m[32m                {[m
+[32m+[m[32m                    type: 'axis',[m
+[32m+[m[32m                    scale: 'y',[m
+[32m+[m[32m                    dock: 'left'[m
+[32m+[m[32m                },[m
+[32m+[m[32m                {[m
+[32m+[m[32m                    type: 'axis',[m
+[32m+[m[32m                    scale: 't',[m
+[32m+[m[32m                    dock: 'bottom'[m
+                 },[m
+[31m-                settings: {[m
+[31m-                    major: {scale: 't'},[m
+[31m-                    minor: {scale: 'y'},[m
+[31m-                    box: {[m
+[31m-                        fill: {scale: 'c', ref:'end'}[m
+[32m+[m[32m                {[m
+[32m+[m[32m                    key: 'bars',[m
+[32m+[m[32m                    type: 'box',[m
+[32m+[m[32m                    data: {[m
+[32m+[m[32m                        extract: {[m
+[32m+[m[32m                            field: 'IFA',[m
+[32m+[m[32m                            props: {[m
+[32m+[m[32m                                start: 0,[m
+[32m+[m[32m                                end: { field: 'Sales' }[m
+[32m+[m[32m                            }[m
+[32m+[m[32m                        }[m
+[32m+[m[32m                    },[m
+[32m+[m[32m                    settings: {[m
+[32m+[m[32m                        major: { scale: 't' },[m
+[32m+[m[32m                        minor: { scale: 'y' },[m
+[32m+[m[32m                        box: {[m
+[32m+[m[32m                            fill: { scale: 'c', ref: 'end' }[m
+[32m+[m[32m                        }[m
+                     }[m
+[31m-                }[m
+[31m-            }][m
+[31m-    }[m
+[31m-});[m
+\ No newline at end of file[m
+[32m+[m[32m                }][m
+[32m+[m[32m        }[m
+[32m+[m[32m    });[m
+[32m+[m[32m}, 2000);[m
+\ No newline at end of file[m
+[1mdiff --git a/Script/data_import.js b/Script/data_import.js[m
+[1mindex 50e381a..205cd9f 100644[m
+[1m--- a/Script/data_import.js[m
+[1m+++ b/Script/data_import.js[m
+[36m@@ -5,66 +5,67 @@[m
+         - Work on calculating totals for each ifa[m
+ */[m
+ [m
+[31m-var data = [];[m
+[32m+[m[32mwindow.chartData = [];[m
+ [m
+[31m-$(document).ready(function(){[m
+[31m-    $.getJSON("Resources/dev_test.dat", data, function(data){[m
+[31m-        var dataStore = [];[m
+[32m+[m[32m$.getJSON("Resources/dev_test.dat", data, function (data) {[m
+[32m+[m[32m    var uniqueIFA = findIFAS(data);[m
+ [m
+[31m-        var uniqueIFA = findIFAS(data);[m
+[32m+[m[32m    console.log("Array of unique IFAs: " + uniqueIFA);[m
+ [m
+[31m-        console.log(uniqueIFA);[m
+[32m+[m[32m    //Now need to run through each IFA, totalling up the sales for each[m
+ [m
+[31m-        //Now need to run through each IFA, totalling up the sales for each[m
+[32m+[m[32m    //For each unique IFA, go through the data and total up its sales[m
+[32m+[m[32m    for (var i = 1; i < uniqueIFA.length; i++) {[m
+[32m+[m[32m        var total = 0;[m
+ [m
+[31m-        for(var i = 0; i < uniqueIFA.length; i++) {[m
+[31m-            var total = 0;[m
+[32m+[m[32m        var currentIFAData = data.filter(function (obj) {[m
+[32m+[m[32m            return obj.ifa === uniqueIFA[i][0];[m
+[32m+[m[32m        });[m
+ [m
+[31m-            var currentIFAData = data.filter(function(obj) {[m
+[31m-                return obj.ifa === uniqueIFA[i][0];[m
+[31m-            });[m
+[32m+[m[32m        //For each row of data for this IFA add to IFA's total sales[m
+[32m+[m[32m        for (var j = 0; j < currentIFAData.length; j++) {[m
+[32m+[m[32m            total += parseInt(currentIFAData[j].sales);[m
+[32m+[m[32m        }[m
+ [m
+[31m-            //For each row for this IFA add to IFA's total[m
+[31m-            for(var j = 0; j < currentIFAData.length; j++) {[m
+[31m-                total += parseInt(currentIFAData[j].sales);[m
+[31m-            }[m
+[32m+[m[32m        console.log("IFA TOTAL FOR " + uniqueIFA[i][0] + ": " + total);[m
+[32m+[m[32m        uniqueIFA[i][1] = total; //Commit sales total to 2d IFA array[m
+[32m+[m[32m    }[m
+ [m
+[31m-            console.log("IFA TOTAL FOR " + uniqueIFA[i][0] + ": " + total);[m
+[31m-        }[m
+[32m+[m[32m    console.log("Array of unique IFAs: " + uniqueIFA);[m
+[32m+[m[32m    document.getElementById('output').innerHTML = uniqueIFA;[m
+[32m+[m[32m    chartData = uniqueIFA.slice();[m
+ [m
+[31m-        /*[m
+[31m-        $.each(data, function() {[m
+[31m-            var total = 0;[m
+[32m+[m[32m    /*[m
+[32m+[m[32m    $.each(data, function() {[m
+[32m+[m[32m        var total = 0;[m
+ [m
+[31m-            var currentIFAData = data.filter(function(obj) {[m
+[31m-                return obj.ifa = uniqueIFA[2][2];[m
+[31m-            });[m
+[32m+[m[32m        var currentIFAData = data.filter(function(obj) {[m
+[32m+[m[32m            return obj.ifa = uniqueIFA[2][2];[m
+[32m+[m[32m        });[m
+ [m
+[31m-            console.log(uniqueIFA[2][0]);[m
+[31m-            console.log("IFA Data:" + currentIFAData);[m
+[32m+[m[32m        console.log(uniqueIFA[2][0]);[m
+[32m+[m[32m        console.log("IFA Data:" + currentIFAData);[m
+ [m
+[31m-            for(var i = 0; i < currentIFAData.length; i++) {[m
+[31m-                total += parseInt(currentIFAData[i].sales);[m
+[31m-            }[m
+[31m-            console.log("total:" + total);[m
+[31m-        })*/[m
+[32m+[m[32m        for(var i = 0; i < currentIFAData.length; i++) {[m
+[32m+[m[32m            total += parseInt(currentIFAData[i].sales);[m
+[32m+[m[32m        }[m
+[32m+[m[32m        console.log("total:" + total);[m
+[32m+[m[32m    })*/[m
+ [m
+[31m-    })[m
+[31m-    $.getJSON("Resources/dev_test.dat", function(data){[m
+[31m-        console.log(data);[m
+[31m-    }).fail(function() {[m
+[31m-        console.log("error in JSON file parsing");[m
+[31m-    });[m
+[32m+[m[32m}).fail(function () {[m
+[32m+[m[32m    console.log("error in retrieving data from JSON file!");[m
+ });[m
+ [m
+ //Function to return an array of unique IFAs mentioned in the data[m
+ //Source used: https://stackoverflow.com/questions/7431618/jquery-finding-distinct-values-in-object-array[m
+ function findIFAS(data) {[m
+[31m-    var uniqueIFA = [];[m
+     var duplicateIFA = {};[m
+[32m+[m[32m    var uniqueIFA = [['IFA', 'Sales']];[m
+[32m+[m
+[32m+[m[32m    console.log("RAN!");[m
+ [m
+[31m-    $.each(data, function(i, el) {[m
+[31m-        if(!duplicateIFA[el.ifa]) {[m
+[32m+[m[32m    $.each(data, function (i, el) {[m
+[32m+[m[32m        if (!duplicateIFA[el.ifa]) {[m
+             duplicateIFA[el.ifa] = true;[m
+             uniqueIFA.push([el.ifa, 0]);[m
+         }[m
+[1mdiff --git a/index.html b/index.html[m
+[1mindex 5c68b80..5f82582 100644[m
+[1m--- a/index.html[m
+[1m+++ b/index.html[m
+[36m@@ -23,9 +23,12 @@[m
+     <div class="container" id="charting">[m
+         <div class="chart-container" id="barchart"></div>[m
+     </div>[m
+[32m+[m[32m    <p id="output"></p>[m
+ [m
+[31m-    <script src="Script/barchart.js"></script>[m
+[31m-    <script src="Script/data_import.js"></script>[m
+[32m+[m[32m    <script>var data = []</script>[m
+[32m+[m[32m    <script type="module" src="Script/data_import.js"></script>[m
+[32m+[m
+[32m+[m[32m    <script type="module" src="Script/barchart.js"></script>[m
+ </body>[m
+ [m
+ </html>[m
+\ No newline at end of file[m
