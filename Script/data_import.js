@@ -8,32 +8,32 @@
 window.chartData = [];
 
 $.getJSON("Resources/dev_test.dat", data, function (data) {
-    var uniqueIFA = findIFAS(data);
+    var uniqueYears = findYears(data);
 
-    console.log("Array of unique IFAs: " + uniqueIFA);
+    console.log("Array of unique IFAs: " + uniqueYears);
 
     //Now need to run through each IFA, totalling up the sales for each
 
     //For each unique IFA, go through the data and total up its sales
-    for (var i = 1; i < uniqueIFA.length; i++) {
+    for (var i = 1; i < uniqueYears.length; i++) {
         var total = 0;
 
-        var currentIFAData = data.filter(function (obj) {
-            return obj.ifa === uniqueIFA[i][0];
+        var currentYearData = data.filter(function (obj) {
+            return obj.year === uniqueYears[i][0];
         });
 
         //For each row of data for this IFA add to IFA's total sales
-        for (var j = 0; j < currentIFAData.length; j++) {
-            total += parseInt(currentIFAData[j].sales);
+        for (var j = 0; j < currentYearData.length; j++) {
+            total += parseInt(currentYearData[j].sales);
         }
 
-        console.log("IFA TOTAL FOR " + uniqueIFA[i][0] + ": " + total);
-        uniqueIFA[i][1] = total; //Commit sales total to 2d IFA array
+        console.log("IFA TOTAL FOR " + uniqueYears[i][0] + ": " + total);
+        uniqueYears[i][1] = total; //Commit sales total to 2d IFA array
     }
 
-    console.log("Array of unique IFAs: " + uniqueIFA);
-    document.getElementById('output').innerHTML = uniqueIFA;
-    chartData = uniqueIFA.slice();
+    console.log("Array of unique IFAs: " + uniqueYears);
+    document.getElementById('output').innerHTML = uniqueYears;
+    chartData = uniqueYears.slice();
 
     /*
     $.each(data, function() {
@@ -72,4 +72,19 @@ function findIFAS(data) {
     });
 
     return uniqueIFA;
+}
+
+//Function to return an array of unique years in the data
+function findYears(data) {
+    var duplicateYears = {};
+    var uniqueYears = [['Year', 'Sales']];
+
+    $.each(data, function(i, el) {
+        if(!duplicateYears[el.year]) {
+            duplicateYears[el.year] = true;
+            uniqueYears.push([el.year, 0]);
+        }
+    });
+
+    return uniqueYears;
 }

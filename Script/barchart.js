@@ -24,7 +24,7 @@ setTimeout(function () { //Delay to avoid undefined variable
                     data: { field: 'Sales' },
                     type: 'color'
                 },
-                t: { data: { extract: { field: 'IFA' } }, padding: 0.3 },
+                t: { data: { extract: { field: 'Year' } }, padding: 0.3 },
             },
             components: [
                 {
@@ -42,7 +42,7 @@ setTimeout(function () { //Delay to avoid undefined variable
                     type: 'box',
                     data: {
                         extract: {
-                            field: 'IFA',
+                            field: 'Year',
                             props: {
                                 start: 0,
                                 end: { field: 'Sales' }
