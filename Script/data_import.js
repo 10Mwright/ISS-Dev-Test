@@ -6,6 +6,7 @@
 */
 
 window.chartData = [];
+var data = [];
 
 $.getJSON("Resources/dev_test.dat", data, function (data) {
     var uniqueYears = findYears(data);
@@ -32,7 +33,6 @@ $.getJSON("Resources/dev_test.dat", data, function (data) {
     }
 
     console.log("Array of unique IFAs: " + uniqueYears);
-    document.getElementById('output').innerHTML = uniqueYears;
     chartData = uniqueYears.slice();
 
     /*
