@@ -29,3 +29,8 @@ html, body {
 .lui-switch {
     float: left;
 }
+
+.selection-group {
+    width: 50%;
+    float: left;
+}
