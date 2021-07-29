@@ -1,19 +1,19 @@
 var data = [];
-var uniqueYears = [];
+var uniqueYears, uniqueIFA = [];
 
 //$.when(getData()).then(buildChart);
 getData([""], [""]);
 
-setTimeout(() => { buildChart(); }, 250); //Slight delay to avoid undefined data
+setTimeout(() => { buildChart(); setupCheckBoxes(); }, 250); //Slight delay to avoid undefined data
 
 //Gather relevant data
+//Args: 1st Arg is an array of IFAs to avoid, 2nd is an array of Funds to avoid
 function getData(ignoredIfas, ignoredFunds) {
     $.getJSON("Resources/dev_test.dat", data, function (data) {
         uniqueYears = findYears(data);
+        uniqueIFA = findIFAS(data);
 
-        console.log(findIFAS(data));
-
-        console.log("Array of unique IFAs: " + uniqueYears);
+        console.log("Array of unique Years: " + uniqueYears);
 
         //For each unique year, go through the data and total up its sales
         for (var i = 1; i < uniqueYears.length; i++) {
@@ -33,11 +33,11 @@ function getData(ignoredIfas, ignoredFunds) {
                 }
             }
 
-            console.log("IFA TOTAL FOR " + uniqueYears[i][0] + ": " + total);
+            console.log("Sales TOTAL FOR " + uniqueYears[i][0] + ": " + total);
             uniqueYears[i][1] = total; //Commit sales total to 2d array
         }
 
-        console.log("Array of unique IFAs: " + uniqueYears);
+        console.log("Array of unique Years: " + uniqueYears);
 
     }).fail(function () {
         console.log("error in retrieving data from JSON file!");
@@ -99,4 +99,24 @@ function buildChart() {
                 }]
         }
     });
+}
+
+//Function to create checkboxes and add listeners
+function setupCheckBoxes() {
+    var targetDiv = document.getElementById("bar-ifa-selection");
+
+    for(var i = 0; i < uniqueIFA.length; i++) { //For each unique IFA
+        targetDiv.innerHTML += '<label class="lui-checkbox"><input class="lui-checkbox__input" type="checkbox" aria-label="' + uniqueIFA[i] + '" checked /><div class="lui-checkbox__check-wrap"><span class="lui-checkbox__check"></span><span class="lui-checkbox__check-text">' + uniqueIFA[i] + '</span></div></label>';
+
+        targetDiv.getElementsByTagName('input')[i].addEventListener("click", recalculate());
+        //$(targetDiv).on('click', '')
+    }
+
+    // targetDiv.addEventListener("click", function(e) {
+    //     console.log(uniqueIFA);
+    // });
+}
+
+function recalculate() {
+    console.log("test!");
 }
