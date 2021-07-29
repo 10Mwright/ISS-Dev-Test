@@ -18,6 +18,8 @@
 </head>
 
 <body>
+    <script src="Script/data-tools.js"></script>
+
     <ul class="lui-tabset" data-tabset>
         <li class="lui-tab lui-active" data-tab-id="bar-chart">
             <span class="lui-tab__text">Bar Chart</span>
@@ -30,13 +32,20 @@
 
     <div data-tab-content="bar-chart" class="container" id="charting" style>
         <div class="chart-container" id="barchart"></div>
+        <div class="fund-selection" id="bar-fund-selection">
+            <label class="lui-checkbox">
+                <input class="lui-checkbox__input" type="checkbox" aria-label="Label" checked />
+                <div class="lui-checkbox__check-wrap">
+                    <span class="lui-checkbox__check"></span>
+                    <span class="lui-checkbox__check-text">Label</span>
+                </div>
+            </label>
+        </div>
     </div>
 
     <div data-tab-content="pie-chart" class="container" id="charting" style="display: none;">
         <div class="chart-container" id="pie-chart"></div>
     </div>
-
-    <script type="module" src="Script/data_import.js"></script>
 
     <script type="module" src="Script/barchart.js"></script>
 

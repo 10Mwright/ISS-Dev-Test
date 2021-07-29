@@ -13,9 +13,7 @@ $.getJSON("Resources/dev_test.dat", data, function (data) {
 
     console.log("Array of unique IFAs: " + uniqueYears);
 
-    //Now need to run through each IFA, totalling up the sales for each
-
-    //For each unique IFA, go through the data and total up its sales
+    //For each unique year, go through the data and total up its sales
     for (var i = 1; i < uniqueYears.length; i++) {
         var total = 0;
 
@@ -23,34 +21,17 @@ $.getJSON("Resources/dev_test.dat", data, function (data) {
             return obj.year === uniqueYears[i][0];
         });
 
-        //For each row of data for this IFA add to IFA's total sales
+        //For each row of data for this year add to year's total sales
         for (var j = 0; j < currentYearData.length; j++) {
             total += parseInt(currentYearData[j].sales);
         }
 
         console.log("IFA TOTAL FOR " + uniqueYears[i][0] + ": " + total);
-        uniqueYears[i][1] = total; //Commit sales total to 2d IFA array
+        uniqueYears[i][1] = total; //Commit sales total to 2d array
     }
 
     console.log("Array of unique IFAs: " + uniqueYears);
     chartData = uniqueYears.slice();
-
-    /*
-    $.each(data, function() {
-        var total = 0;
-
-        var currentIFAData = data.filter(function(obj) {
-            return obj.ifa = uniqueIFA[2][2];
-        });
-
-        console.log(uniqueIFA[2][0]);
-        console.log("IFA Data:" + currentIFAData);
-
-        for(var i = 0; i < currentIFAData.length; i++) {
-            total += parseInt(currentIFAData[i].sales);
-        }
-        console.log("total:" + total);
-    })*/
 
 }).fail(function () {
     console.log("error in retrieving data from JSON file!");
@@ -82,7 +63,7 @@ function findYears(data) {
     $.each(data, function(i, el) {
         if(!duplicateYears[el.year]) {
             duplicateYears[el.year] = true;
-            uniqueYears.push([el.year, 0]);
+            uniqueYears.push([el.year,, 0]);
         }
     });
 

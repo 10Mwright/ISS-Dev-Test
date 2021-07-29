@@ -1,16 +1,56 @@
-setTimeout(function () { //Delay to avoid undefined variable
-    for(var i = 0; i < chartData[i].length; i++) {
-        for(var z = 0; z < chartData.length; z++) {
-          console.log(chartData[z][i]);
-        }
-      }
+var data = [];
+var uniqueYears = [];
 
+//$.when(getData()).then(buildChart);
+getData([""], [""]);
+
+setTimeout(() => { buildChart(); }, 250); //Slight delay to avoid undefined data
+
+//Gather relevant data
+function getData(ignoredIfas, ignoredFunds) {
+    $.getJSON("Resources/dev_test.dat", data, function (data) {
+        uniqueYears = findYears(data);
+
+        console.log(findIFAS(data));
+
+        console.log("Array of unique IFAs: " + uniqueYears);
+
+        //For each unique year, go through the data and total up its sales
+        for (var i = 1; i < uniqueYears.length; i++) {
+            var total = 0;
+
+            var currentYearData = data.filter(function (obj) {
+                return obj.year === uniqueYears[i][0];
+            });
+
+            //For each row of data for this year add to year's total sales
+            for (var j = 0; j < currentYearData.length; j++) {
+                //console.log(currentYearData[j].id + currentYearData[j].ifa + currentYearData[j].fund);
+                if ($.inArray(currentYearData[j].ifa, ignoredIfas) == -1) { //Remove any ignored IFAS
+                    if ($.inArray(currentYearData[j].fund, ignoredFunds) == -1) { //Remove any ignored funds
+                        total += parseInt(currentYearData[j].sales);
+                    }
+                }
+            }
+
+            console.log("IFA TOTAL FOR " + uniqueYears[i][0] + ": " + total);
+            uniqueYears[i][1] = total; //Commit sales total to 2d array
+        }
+
+        console.log("Array of unique IFAs: " + uniqueYears);
+
+    }).fail(function () {
+        console.log("error in retrieving data from JSON file!");
+    });
+}
+
+function buildChart() {
     picasso.chart({
         element: document.getElementById('charting').querySelector('#barchart'),
         data: [
             {
                 type: 'bar',
-                data: chartData,
+                data: uniqueYears,
             },
         ],
         settings: {
@@ -59,4 +99,4 @@ setTimeout(function () { //Delay to avoid undefined variable
                 }]
         }
     });
-}, 2000);
+}
