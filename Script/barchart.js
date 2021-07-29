@@ -106,17 +106,26 @@ function setupCheckBoxes() {
     var targetDiv = document.getElementById("bar-ifa-selection");
 
     for(var i = 0; i < uniqueIFA.length; i++) { //For each unique IFA
-        targetDiv.innerHTML += '<label class="lui-checkbox"><input class="lui-checkbox__input" type="checkbox" aria-label="' + uniqueIFA[i] + '" checked /><div class="lui-checkbox__check-wrap"><span class="lui-checkbox__check"></span><span class="lui-checkbox__check-text">' + uniqueIFA[i] + '</span></div></label>';
+        var newCheckbox = document.createElement("label"); //New DOM element
+        newCheckbox.setAttribute('class', 'lui-checkbox'); //Add lui class to new element
+        newCheckbox.innerHTML += '<input class="lui-checkbox__input" type="checkbox" id="' + uniqueIFA[i] + '" checked /><div class="lui-checkbox__check-wrap"><span class="lui-checkbox__check"></span><span class="lui-checkbox__check-text">' + uniqueIFA[i] + '</span></div>';
 
-        targetDiv.getElementsByTagName('input')[i].addEventListener("click", recalculate());
-        //$(targetDiv).on('click', '')
+        targetDiv.appendChild(newCheckbox); //Add new checkbox element to div element
+
+        targetDiv.getElementsByTagName("input")[i].addEventListener("click", recalculate); //Add onclick listener to new checkbox
     }
-
-    // targetDiv.addEventListener("click", function(e) {
-    //     console.log(uniqueIFA);
-    // });
 }
 
+//Function to read unchecked boxes and recalculate totals on only checked elements.
 function recalculate() {
-    console.log("test!");
+    var targetDiv = document.getElementById("bar-ifa-selection");
+    var ignoredIFA = [];
+
+    for(var i = 0; i < uniqueIFA.length; i++) {
+        if(!targetDiv.getElementsByTagName("input")[i].checked)  {
+            ignoredIFA.push(uniqueIFA[i]);
+        }
+    }
+
+    console.log("ignored ifas: " + ignoredIFA);
 }
