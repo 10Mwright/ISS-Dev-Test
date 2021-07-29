@@ -1,10 +1,10 @@
 var data = [];
-var uniqueYears, uniqueIFA = [];
+var uniqueYears, uniqueIFA, uniqueFunds = [];
 
 //$.when(getData()).then(buildChart);
 getData([""], [""]);
 
-setTimeout(() => { buildChart(); setupIFASelection(); }, 250); //Slight delay to avoid undefined data
+setTimeout(() => { buildChart(); setupIFASelection(); setupFundSelection(); }, 250); //Slight delay to avoid undefined data
 
 //Gather relevant data
 //Args: 1st Arg is an array of IFAs to avoid, 2nd is an array of Funds to avoid
@@ -12,6 +12,7 @@ function getData(ignoredIfas, ignoredFunds) {
     $.getJSON("Resources/dev_test.dat", data, function (data) {
         uniqueYears = findYears(data);
         uniqueIFA = findIFAS(data);
+        uniqueFunds = findFunds(data);
 
         console.log("Array of unique Years: " + uniqueYears);
 
@@ -116,20 +117,43 @@ function setupIFASelection() {
     }
 }
 
+function setupFundSelection() {
+    var targetDiv = document.getElementById("bar-fund-selection");
+
+    for(var i = 0; i < uniqueFunds.length; i++) { //For each unique IFA
+        var newCheckbox = document.createElement("label"); //New DOM element
+        newCheckbox.setAttribute('class', 'lui-checkbox'); //Add lui class to new element
+        newCheckbox.innerHTML += '<input class="lui-checkbox__input" type="checkbox" id="' + uniqueFunds[i] + '" checked /><div class="lui-checkbox__check-wrap"><span class="lui-checkbox__check"></span><span class="lui-checkbox__check-text">' + uniqueFunds[i] + '</span></div>';
+
+        targetDiv.appendChild(newCheckbox); //Add new checkbox element to div element
+
+        targetDiv.getElementsByTagName("input")[i].addEventListener("click", recalculate); //Add onclick listener to new checkbox
+    }
+}
+
 //Function to read unchecked boxes and recalculate totals on only checked elements.
 function recalculate() {
-    var targetDiv = document.getElementById("bar-ifa-selection");
-    var ignoredIFA = [];
+    var ifaDiv = document.getElementById("bar-ifa-selection");
+    var fundDiv = document.getElementById("bar-fund-selection");
+    var ignoredIFA, ignoredFunds = [];
 
+    //Find IFAs to ignore
     for(var i = 0; i < uniqueIFA.length; i++) {
-        if(!targetDiv.getElementsByTagName("input")[i].checked)  {
+        if(!ifaDiv.getElementsByTagName("input")[i].checked)  {
             ignoredIFA.push(uniqueIFA[i]);
         }
     }
 
-    console.log("ignored ifas: " + ignoredIFA);
+    for(var i = 0; i < uniqueFunds.length; i++) {
+        if(!fundDiv.getElementsByTagName("input")[i].checked) {
+            ignoredFunds.push(uniqueFunds[i]);
+        }
+    }
 
-    getData(ignoredIFA, [""]);
+    console.log("ignored ifas: " + ignoredIFA);
+    console.log("ignored funds: " + ignoredFunds);
+
+    getData(ignoredIFA, ignoredFunds);
     
     setTimeout(() => { buildChart(); }, 250); //Slight delay to avoid undefined data
 }

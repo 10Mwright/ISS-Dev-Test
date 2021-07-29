@@ -28,3 +28,17 @@ function findYears(data) {
 
     return uniqueYears;
 }
+
+function findFunds(data) {
+    var duplicateFunds = {};
+    var uniqueFunds = [];
+
+    $.each(data, function(i, el) {
+        if(!duplicateFunds[el.fund]) {
+            duplicateFunds[el.fund] = true;
+            uniqueFunds.push(el.fund);
+        }
+    });
+
+    return uniqueFunds;
+}
