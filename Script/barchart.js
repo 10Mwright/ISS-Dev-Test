@@ -4,7 +4,7 @@ var uniqueYears, uniqueIFA = [];
 //$.when(getData()).then(buildChart);
 getData([""], [""]);
 
-setTimeout(() => { buildChart(); setupCheckBoxes(); }, 250); //Slight delay to avoid undefined data
+setTimeout(() => { buildChart(); setupIFASelection(); }, 250); //Slight delay to avoid undefined data
 
 //Gather relevant data
 //Args: 1st Arg is an array of IFAs to avoid, 2nd is an array of Funds to avoid
@@ -102,7 +102,7 @@ function buildChart() {
 }
 
 //Function to create checkboxes and add listeners
-function setupCheckBoxes() {
+function setupIFASelection() {
     var targetDiv = document.getElementById("bar-ifa-selection");
 
     for(var i = 0; i < uniqueIFA.length; i++) { //For each unique IFA
@@ -128,4 +128,8 @@ function recalculate() {
     }
 
     console.log("ignored ifas: " + ignoredIFA);
+
+    getData(ignoredIFA, [""]);
+    
+    setTimeout(() => { buildChart(); }, 250); //Slight delay to avoid undefined data
 }
