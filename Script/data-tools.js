@@ -15,6 +15,7 @@ function findIFAS(data) {
 }
 
 //Function to return an array of unique years in the data
+//Source used: https://stackoverflow.com/questions/7431618/jquery-finding-distinct-values-in-object-array
 function findYears(data) {
     var duplicateYears = {};
     var uniqueYears = [['Year', 'Sales']];
@@ -29,6 +30,8 @@ function findYears(data) {
     return uniqueYears;
 }
 
+//Function to return an array of unique funds in the dat
+//Source used: https://stackoverflow.com/questions/7431618/jquery-finding-distinct-values-in-object-array
 function findFunds(data) {
     var duplicateFunds = {};
     var uniqueFunds = [];

@@ -14,13 +14,11 @@ function getData(ignoredIfas, ignoredFunds) {
         uniqueIFA = findIFAS(data);
         uniqueFunds = findFunds(data);
 
-        console.log("Array of unique Years: " + uniqueYears);
-
         //For each unique year, go through the data and total up its sales
         for (var i = 1; i < uniqueYears.length; i++) {
             var total = 0;
 
-            var currentYearData = data.filter(function (obj) {
+            var currentYearData = data.filter(function (obj) { //Filter data for only the currently targetted year
                 return obj.year === uniqueYears[i][0];
             });
 
@@ -34,11 +32,11 @@ function getData(ignoredIfas, ignoredFunds) {
                 }
             }
 
-            console.log("Sales TOTAL FOR " + uniqueYears[i][0] + ": " + total);
+            console.log("Sales total for: " + uniqueYears[i][0] + " is " + total);
             uniqueYears[i][1] = total; //Commit sales total to 2d array
         }
 
-        console.log("Array of unique Years: " + uniqueYears);
+        console.log("Array of yearly totals: " + uniqueYears);
 
     }).fail(function () {
         console.log("error in retrieving data from JSON file!");
@@ -135,7 +133,8 @@ function setupFundSelection() {
 function recalculate() {
     var ifaDiv = document.getElementById("bar-ifa-selection");
     var fundDiv = document.getElementById("bar-fund-selection");
-    var ignoredIFA, ignoredFunds = [];
+    var ignoredIFA = []; 
+    var ignoredFunds = [];
 
     //Find IFAs to ignore
     for(var i = 0; i < uniqueIFA.length; i++) {
