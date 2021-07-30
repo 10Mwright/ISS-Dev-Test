@@ -3,13 +3,13 @@ var chartData = [];
 var uniqueYears, uniqueIFA, uniqueFunds = [];
 
 document.getElementById('chart-tabs').querySelector('#pie-tab').addEventListener("click", function () {
-    getData();
+    getData("2019");
 
-    setTimeout(() => { buildChart(); }, 250);
+    setTimeout(() => { buildChart(); setupYearSelection(); }, 250);
 });
 
 //Gather relevant data
-function getData() {
+function getData(selectedYear) {
     console.log("test!");
     $.getJSON("Resources/dev_test.dat", data, function (data) {
         //First get unique ifas, and get data on a per ifa basis
@@ -20,13 +20,13 @@ function getData() {
         uniqueFunds = findFunds(data);
         chartData = [['IFA', 'Market Share']]; //Setup 2d array for chart
 
-        var salesTotal = calculateOverallTotal(data);
+        var salesTotal = calculateOverallTotal(data, selectedYear);
 
         for (var i = 0; i < uniqueIFA.length; i++) { //For each unique IFA
             var marketShare = 0;
 
             var currentIFAData = data.filter(function (obj) { //Get IFAs data
-                return obj.ifa === uniqueIFA[i];
+                return obj.ifa === uniqueIFA[i] && obj.year === selectedYear;
             });
 
             for (var j = 0; j < currentIFAData.length; j++) {
@@ -87,4 +87,16 @@ function buildChart() {
             }]
         }
     });
+}
+
+function setupYearSelection() {
+    var targetDiv = document.getElementById("pie-year-selection");
+    var newSelect = document.createElement("select");
+    newSelect.setAttribute('class', 'lui-select');
+
+    for(var i = 0; i < uniqueYears.length; i++) {
+        newSelect.innerHTML += '<option value="' + uniqueYears[i] + '">' + uniqueYears[i] + '</option>'
+    }
+
+    targetDiv.appendChild(newSelect);
 }

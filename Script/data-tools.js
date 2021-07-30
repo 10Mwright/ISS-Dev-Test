@@ -47,11 +47,12 @@ function findFunds(data) {
 }
 
 //Function to return an overall total of sales
-function calculateOverallTotal(data) {
+function calculateOverallTotal(data, selectedYear) {
     var total = 0;
 
     data.forEach(element => {
-        total += parseInt(element.sales);
+        if(element.year === selectedYear) 
+            total += parseInt(element.sales);
     });
 
     return total;
