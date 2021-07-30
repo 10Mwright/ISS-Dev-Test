@@ -45,3 +45,14 @@ function findFunds(data) {
 
     return uniqueFunds;
 }
+
+//Function to return an overall total of sales
+function calculateOverallTotal(data) {
+    var total = 0;
+
+    data.forEach(element => {
+        total += parseInt(element.sales);
+    });
+
+    return total;
+}
