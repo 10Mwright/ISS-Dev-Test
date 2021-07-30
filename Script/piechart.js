@@ -1,5 +1,6 @@
 var data = [];
 var chartData = [];
+var uniqueYears, uniqueIFA, uniqueFunds = [];
 
 document.getElementById('chart-tabs').querySelector('#pie-tab').addEventListener("click", function () {
     getData();
@@ -14,27 +15,33 @@ function getData() {
         //First get unique ifas, and get data on a per ifa basis
         //Must calculate market share by dividing ifa's total sales by overall total
         //Then work on filtering out years and funds
-        var uniqueIFA = findIFAS(data);
-        chartData = [['IFA', 'Sales']];
+        uniqueIFA = findIFAS(data);
+        uniqueYears = findYears(data);
+        uniqueFunds = findFunds(data);
+        chartData = [['IFA', 'Market Share']]; //Setup 2d array for chart
+
+        var salesTotal = calculateOverallTotal(data);
 
         for (var i = 0; i < uniqueIFA.length; i++) { //For each unique IFA
-            var total = 0;
+            var marketShare = 0;
 
             var currentIFAData = data.filter(function (obj) { //Get IFAs data
                 return obj.ifa === uniqueIFA[i];
             });
 
             for (var j = 0; j < currentIFAData.length; j++) {
-                total += parseInt(currentIFAData[j].sales);
+                marketShare += parseInt(currentIFAData[j].sales);
             }
 
-            console.log("Sales total for: " + uniqueIFA[i] + " is " + total);
+            marketShare = (marketShare / salesTotal) * 100; //Calculate market share
+
+            console.log("Market Share for: " + uniqueIFA[i] + " is " + marketShare);
 
             //Must convert original 1D array into 2D array to store this value.
-            chartData.push([uniqueIFA[i], total]);
-
-            console.log(chartData);
+            chartData.push([uniqueIFA[i], marketShare]);
         }
+
+        console.log(chartData);
     }).fail(function () {
         console.log("error in retrieving data from JSON file!");
     });
@@ -64,7 +71,7 @@ function buildChart() {
                     extract: {
                         field: 'IFA',
                         props: {
-                            num: { field: 'Sales' }
+                            num: { field: 'Market Share' }
                         }
                     }
                 },
