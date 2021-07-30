@@ -1,4 +1,5 @@
 var data = [];
+var chartData = [];
 var uniqueYears, uniqueIFA, uniqueFunds = [];
 
 //$.when(getData()).then(buildChart);
@@ -13,13 +14,14 @@ function getData(ignoredIfas, ignoredFunds) {
         uniqueYears = findYears(data);
         uniqueIFA = findIFAS(data);
         uniqueFunds = findFunds(data);
+        chartData = [['Year', 'Sales']];
 
         //For each unique year, go through the data and total up its sales
-        for (var i = 1; i < uniqueYears.length; i++) {
+        for (var i = 0; i < uniqueYears.length; i++) {
             var total = 0;
 
             var currentYearData = data.filter(function (obj) { //Filter data for only the currently targetted year
-                return obj.year === uniqueYears[i][0];
+                return obj.year === uniqueYears[i];
             });
 
             //For each row of data for this year add to year's total sales
@@ -33,10 +35,11 @@ function getData(ignoredIfas, ignoredFunds) {
             }
 
             console.log("Sales total for: " + uniqueYears[i][0] + " is " + total);
-            uniqueYears[i][1] = total; //Commit sales total to 2d array
+            chartData.push([uniqueYears[i], total]);
+            //uniqueYears[i][1] = total; //Commit sales total to 2d array
         }
 
-        console.log("Array of yearly totals: " + uniqueYears);
+        console.log("Array of yearly totals: " + chartData);
 
     }).fail(function () {
         console.log("error in retrieving data from JSON file!");
@@ -49,7 +52,7 @@ function buildChart() {
         data: [
             {
                 type: 'bar',
-                data: uniqueYears,
+                data: chartData,
             },
         ],
         settings: {

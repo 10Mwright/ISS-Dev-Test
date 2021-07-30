@@ -18,12 +18,12 @@ function findIFAS(data) {
 //Source used: https://stackoverflow.com/questions/7431618/jquery-finding-distinct-values-in-object-array
 function findYears(data) {
     var duplicateYears = {};
-    var uniqueYears = [['Year', 'Sales']];
+    var uniqueYears = [];
 
     $.each(data, function(i, el) {
         if(!duplicateYears[el.year]) {
             duplicateYears[el.year] = true;
-            uniqueYears.push([el.year, 0]);
+            uniqueYears.push(el.year);
         }
     });
 
