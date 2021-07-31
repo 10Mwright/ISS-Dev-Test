@@ -46,11 +46,20 @@ function findFunds(data) {
     return uniqueFunds;
 }
 
+//Function to get a map of unique attributes within the data
+function getUniqueAttributes(data) {
+    var uniqueAttributes = new Map();
+
+    uniqueAttributes.set("Years", findYears(data));
+    uniqueAttributes.set("ifas", findIFAS(data));
+    uniqueAttributes.set("Funds", findFunds(data));
+
+    return uniqueAttributes;
+}
+
 //Function to return an overall total of sales
 function calculateOverallTotal(data, selectedYear, ignoredFunds) {
     var total = 0;
-
-    console.log("ignored funds: " + ignoredFunds);
 
     data.forEach(element => {
         if(element.year === selectedYear) {

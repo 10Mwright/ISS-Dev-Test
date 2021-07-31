@@ -1,7 +1,6 @@
-var data = [];
-var chartData = [];
+var data, chartData = [];
+var uniqueAttributes = new Map;
 var chartDiv = document.getElementById('pie').querySelector('#piechart');
-var uniqueYears, uniqueIFA, uniqueFunds = [];
 
 //Triggered when Pie Chart tab button is clicked, this is to allow the chart to render
 //as on initial page load the pie chart div is set to hidden.
@@ -16,20 +15,18 @@ document.getElementById('chart-tabs').querySelector('#pie-tab').addEventListener
 //Gather relevant data
 function getData(selectedYear, ignoredFunds) {
     $.getJSON("Resources/dev_test.dat", data, function (data) {
-        uniqueIFA = findIFAS(data);
-        uniqueYears = findYears(data);
-        uniqueFunds = findFunds(data);
+        uniqueAttributes = getUniqueAttributes(data);
         chartData = [['IFA', 'Market Share']]; //Setup 2d array for chart
 
-        if (selectedYear === "latest") selectedYear = uniqueYears[0]; //Default value is first year
+        if (selectedYear === "latest") selectedYear = uniqueAttributes.get("Years")[0]; //Default value is first year
 
         var salesTotal = calculateOverallTotal(data, selectedYear, ignoredFunds);
 
-        for (var i = 0; i < uniqueIFA.length; i++) { //For each unique IFA
+        for (var i = 0; i < uniqueAttributes.get("ifas").length; i++) { //For each unique IFA
             var marketShare = 0;
 
             var currentIFAData = data.filter(function (obj) { //Get IFAs data
-                return obj.ifa === uniqueIFA[i] && obj.year === selectedYear;
+                return obj.ifa === uniqueAttributes.get("ifas")[i] && obj.year === selectedYear;
             });
 
             //For each row of data for this IFA calculated the total sales
@@ -41,10 +38,10 @@ function getData(selectedYear, ignoredFunds) {
 
             marketShare = (marketShare / salesTotal) * 100; //Calculate market share
 
-            console.log("Market Share for: " + uniqueIFA[i] + " is " + marketShare);
+            console.log("Market Share for: " + uniqueAttributes.get("ifas")[i] + " is " + marketShare);
 
             //Must convert original 1D array into 2D array to store this value.
-            chartData.push([uniqueIFA[i], marketShare]);
+            chartData.push([uniqueAttributes.get("ifas")[i], marketShare]);
         }
 
         console.log(chartData);
@@ -102,8 +99,9 @@ function setupYearSelection() {
     newSelect.setAttribute('class', 'lui-select');
     newSelect.setAttribute('id', 'year-selection');
 
-    for (var i = 0; i < uniqueYears.length; i++) { //Add each unique year to the options
-        newSelect.innerHTML += '<option value="' + uniqueYears[i] + '">' + uniqueYears[i] + '</option>'
+    for (var i = 0; i < uniqueAttributes.get("Years").length; i++) { //Add each unique year to the options
+        var currentYear = uniqueAttributes.get("Years")[i]; //Current year in array
+        newSelect.innerHTML += '<option value="' + currentYear + '">' + currentYear + '</option>'
     }
 
     newSelect.addEventListener("change", recalculate); //Add a change listener, triggered when option is changed
@@ -116,10 +114,12 @@ function setupFundSelection() {
     var targetDiv = document.getElementById("pie-fund-selection");
     //targetDiv.innerHTML = ""; //Empty target div, to avoid repeated checkboxes
 
-    for (var i = 0; i < uniqueFunds.length; i++) { //Add each fund as a checkbox
+    for (var i = 0; i < uniqueAttributes.get("Funds").length; i++) { //Add each fund as a checkbox
+        var currentFund = uniqueAttributes.get("Funds")[i];
+
         var newCheckbox = document.createElement("label");
         newCheckbox.setAttribute('class', 'lui-checkbox');
-        newCheckbox.innerHTML += '<input class="lui-checkbox__input" type="checkbox" id="' + uniqueFunds[i] + '" checked /><div class="lui-checkbox__check-wrap"><span class="lui-checkbox__check"></span><span class="lui-checkbox__check-text">' + uniqueFunds[i] + '</span></div>';
+        newCheckbox.innerHTML += '<input class="lui-checkbox__input" type="checkbox" id="' + currentFund + '" checked /><div class="lui-checkbox__check-wrap"><span class="lui-checkbox__check"></span><span class="lui-checkbox__check-text">' + currentFund + '</span></div>';
 
         targetDiv.appendChild(newCheckbox); //Add checkbox to div
 
@@ -136,9 +136,9 @@ function recalculate() {
     var ignoredFunds = [];
 
     //Find unchecked boxes for fund selection, these will be ignored
-    for (var i = 0; i < uniqueFunds.length; i++) {
+    for (var i = 0; i < uniqueAttributes.get("Funds").length; i++) {
         if (!fundDiv.getElementsByTagName("input")[i].checked) {
-            ignoredFunds.push(uniqueFunds[i]);
+            ignoredFunds.push(uniqueAttributes.get("Funds")[i]);
         }
     }
 
