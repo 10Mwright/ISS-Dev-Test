@@ -1,42 +1,42 @@
 var data = [];
 var chartData = [];
-var uniqueYears, uniqueIFA, uniqueFunds = [];
+var uniqueAttributes = new Map;
 
 //$.when(getData()).then(buildChart);
 getData([""], [""]);
 
-setTimeout(() => { buildChart(); setupIFASelection(); setupFundSelection(); }, 250); //Slight delay to avoid undefined data
+setTimeout(() => { 
+    var defaultIFAs = uniqueAttributes.get("ifas");
+    var defaultFunds = uniqueAttributes.get("Funds");
+    buildChart(defaultIFAs, defaultFunds); 
+    setupIFASelection(); 
+    setupFundSelection(); }, 250); //Slight delay to avoid undefined data
 
 //Gather relevant data
 //Args: 1st Arg is an array of IFAs to avoid, 2nd is an array of Funds to avoid
 function getData(ignoredIfas, ignoredFunds) {
     $.getJSON("Resources/dev_test.dat", data, function (data) {
-        uniqueYears = findYears(data);
-        uniqueIFA = findIFAS(data);
-        uniqueFunds = findFunds(data);
+        uniqueAttributes = getUniqueAttributes(data);
         chartData = [['Year', 'Sales']];
 
         //For each unique year, go through the data and total up its sales
-        for (var i = 0; i < uniqueYears.length; i++) {
+        for (var i = 0; i < uniqueAttributes.get("Years").length; i++) {
             var total = 0;
+            var currentYear = uniqueAttributes.get("Years")[i];
 
             var currentYearData = data.filter(function (obj) { //Filter data for only the currently targetted year
-                return obj.year === uniqueYears[i];
+                return obj.year === currentYear
+                    && $.inArray(obj.ifa, ignoredIfas) == -1
+                    && $.inArray(obj.fund, ignoredFunds) == -1;
             });
 
             //For each row of data for this year add to year's total sales
             for (var j = 0; j < currentYearData.length; j++) {
-                //console.log(currentYearData[j].id + currentYearData[j].ifa + currentYearData[j].fund);
-                if ($.inArray(currentYearData[j].ifa, ignoredIfas) == -1) { //Remove any ignored IFAS
-                    if ($.inArray(currentYearData[j].fund, ignoredFunds) == -1) { //Remove any ignored funds
-                        total += parseInt(currentYearData[j].sales);
-                    }
-                }
+                total += parseInt(currentYearData[j].sales);
             }
 
-            console.log("Sales total for: " + uniqueYears[i] + " is " + total);
-            chartData.push([uniqueYears[i], total]);
-            //uniqueYears[i][1] = total; //Commit sales total to 2d array
+            console.log("Sales total for: " + currentYear + " is " + total);
+            chartData.push([currentYear, total]);
         }
 
         console.log("Array of yearly totals: " + chartData);
@@ -46,7 +46,7 @@ function getData(ignoredIfas, ignoredFunds) {
     });
 }
 
-function buildChart() {
+function buildChart(ifas, funds) {
     picasso.chart({
         element: document.getElementById('charting').querySelector('#barchart'),
         data: [
@@ -73,12 +73,22 @@ function buildChart() {
                     type: 'text',
                     text: 'Chart showing total sales of select IFAs in select Funds by Year',
                     dock: 'top',
+                    layout: { displayOrder: 3 },
                     style: {
                         text: {
                             fontSize: '150%',
                         },
                     },
                 }, {
+                    type: 'text',
+                    text: 'IFAs Included: ' + ifas,
+                    dock: 'top',
+                    layout: { displayOrder: 2 }
+                }, {
+                    type: 'text',
+                    text: 'Funds Included: ' + funds,
+                    dock: 'top',
+                    layout: { displayOrder: 1 }
                 }, {
                     type: 'axis',
                     scale: 'y',
@@ -143,10 +153,12 @@ function buildChart() {
 function setupIFASelection() {
     var targetDiv = document.getElementById("bar-ifa-selection");
 
-    for(var i = 0; i < uniqueIFA.length; i++) { //For each unique IFA
+    for(var i = 0; i < uniqueAttributes.get("ifas").length; i++) { //For each unique IFA
+        var currentIFA = uniqueAttributes.get("ifas")[i];
+
         var newCheckbox = document.createElement("label"); //New DOM element
         newCheckbox.setAttribute('class', 'lui-checkbox'); //Add lui class to new element
-        newCheckbox.innerHTML += '<input class="lui-checkbox__input" type="checkbox" id="' + uniqueIFA[i] + '" checked /><div class="lui-checkbox__check-wrap"><span class="lui-checkbox__check"></span><span class="lui-checkbox__check-text">' + uniqueIFA[i] + '</span></div>';
+        newCheckbox.innerHTML += '<input class="lui-checkbox__input" type="checkbox" id="' + currentIFA + '" checked /><div class="lui-checkbox__check-wrap"><span class="lui-checkbox__check"></span><span class="lui-checkbox__check-text">' + currentIFA + '</span></div>';
 
         targetDiv.appendChild(newCheckbox); //Add new checkbox element to div element
 
@@ -157,10 +169,12 @@ function setupIFASelection() {
 function setupFundSelection() {
     var targetDiv = document.getElementById("bar-fund-selection");
 
-    for(var i = 0; i < uniqueFunds.length; i++) { //For each unique IFA
+    for(var i = 0; i < uniqueAttributes.get("Funds").length; i++) { //For each unique fund
+        var currentFund = uniqueAttributes.get("Funds")[i];
+
         var newCheckbox = document.createElement("label"); //New DOM element
         newCheckbox.setAttribute('class', 'lui-checkbox'); //Add lui class to new element
-        newCheckbox.innerHTML += '<input class="lui-checkbox__input" type="checkbox" id="' + uniqueFunds[i] + '" checked /><div class="lui-checkbox__check-wrap"><span class="lui-checkbox__check"></span><span class="lui-checkbox__check-text">' + uniqueFunds[i] + '</span></div>';
+        newCheckbox.innerHTML += '<input class="lui-checkbox__input" type="checkbox" id="' + currentFund + '" checked /><div class="lui-checkbox__check-wrap"><span class="lui-checkbox__check"></span><span class="lui-checkbox__check-text">' + currentFund + '</span></div>';
 
         targetDiv.appendChild(newCheckbox); //Add new checkbox element to div element
 
@@ -174,17 +188,23 @@ function recalculate() {
     var fundDiv = document.getElementById("bar-fund-selection");
     var ignoredIFA = []; 
     var ignoredFunds = [];
+    var includedIFA = [];
+    var includedFunds = [];
 
     //Find IFAs to ignore
-    for(var i = 0; i < uniqueIFA.length; i++) {
+    for(var i = 0; i < uniqueAttributes.get("ifas").length; i++) {
         if(!ifaDiv.getElementsByTagName("input")[i].checked)  {
-            ignoredIFA.push(uniqueIFA[i]);
+            ignoredIFA.push(uniqueAttributes.get("ifas")[i]);
+        } else {
+            includedIFA.push(uniqueAttributes.get("ifas")[i]);
         }
     }
 
-    for(var i = 0; i < uniqueFunds.length; i++) {
+    for(var i = 0; i < uniqueAttributes.get("Funds").length; i++) {
         if(!fundDiv.getElementsByTagName("input")[i].checked) {
-            ignoredFunds.push(uniqueFunds[i]);
+            ignoredFunds.push(uniqueAttributes.get("Funds")[i]);
+        } else {
+            includedFunds.push(uniqueAttributes.get("Funds")[i]);
         }
     }
 
@@ -193,5 +213,5 @@ function recalculate() {
 
     getData(ignoredIFA, ignoredFunds);
     
-    setTimeout(() => { buildChart(); }, 250); //Slight delay to avoid undefined data
+    setTimeout(() => { buildChart(includedIFA, includedFunds); }, 250); //Slight delay to avoid undefined data
 }
