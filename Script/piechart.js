@@ -2,14 +2,16 @@ var data = [];
 var chartData = [];
 var uniqueYears, uniqueIFA, uniqueFunds = [];
 
+//Triggered when Pie Chart tab button is clicked, this is to allow the chart to render
+//as on initial page load the pie chart div is set to hidden.
 document.getElementById('chart-tabs').querySelector('#pie-tab').addEventListener("click", function () {
-    getData();
+    getData(null, [""]);
 
-    setTimeout(() => { buildChart(); setupYearSelection(); }, 250);
+    setTimeout(() => { buildChart(); setupYearSelection(); setupFundSelection(); }, 250);
 });
 
 //Gather relevant data
-function getData(selectedYear) {
+function getData(selectedYear, ignoredFunds) {
     console.log("test!");
     $.getJSON("Resources/dev_test.dat", data, function (data) {
         //First get unique ifas, and get data on a per ifa basis
@@ -20,9 +22,9 @@ function getData(selectedYear) {
         uniqueFunds = findFunds(data);
         chartData = [['IFA', 'Market Share']]; //Setup 2d array for chart
 
-        if(selectedYear == null) selectedYear = uniqueYears[0]; //Default value is first year
+        if (selectedYear == null) selectedYear = uniqueYears[0]; //Default value is first year
 
-        var salesTotal = calculateOverallTotal(data, selectedYear);
+        var salesTotal = calculateOverallTotal(data, selectedYear, ignoredFunds);
 
         for (var i = 0; i < uniqueIFA.length; i++) { //For each unique IFA
             var marketShare = 0;
@@ -31,8 +33,11 @@ function getData(selectedYear) {
                 return obj.ifa === uniqueIFA[i] && obj.year === selectedYear;
             });
 
+            //For each row of data for this IFA calculated the total sales
             for (var j = 0; j < currentIFAData.length; j++) {
-                marketShare += parseInt(currentIFAData[j].sales);
+                if ($.inArray(currentIFAData[j].fund, ignoredFunds) == -1) {
+                    marketShare += parseInt(currentIFAData[j].sales);
+                }
             }
 
             marketShare = (marketShare / salesTotal) * 100; //Calculate market share
@@ -91,27 +96,57 @@ function buildChart() {
     });
 }
 
+//Function to setup selection box for year
 function setupYearSelection() {
     var targetDiv = document.getElementById("pie-year-selection");
-    var newSelect = document.createElement("select");
+    var newSelect = document.createElement("select"); //Setup select box
     newSelect.setAttribute('class', 'lui-select');
     newSelect.setAttribute('id', 'year-selection');
 
-    for(var i = 0; i < uniqueYears.length; i++) {
+    for (var i = 0; i < uniqueYears.length; i++) { //Add each unique year to the options
         newSelect.innerHTML += '<option value="' + uniqueYears[i] + '">' + uniqueYears[i] + '</option>'
     }
 
-    newSelect.addEventListener("change", recalculate);
+    newSelect.addEventListener("change", recalculate); //Add a change listener, triggered when option is changed
     targetDiv.innerHTML = ""; //Ensure multiple selects aren't added when page is revisted
     targetDiv.appendChild(newSelect);
 }
 
+//Function to setup checkboxes for fund selection
+function setupFundSelection() {
+    var targetDiv = document.getElementById("pie-fund-selection");
+    targetDiv.innerHTML = ""; //Empty target div, to avoid repeated checkboxes
+
+    for (var i = 0; i < uniqueFunds.length; i++) { //Add each fund as a checkbox
+        var newCheckbox = document.createElement("label");
+        newCheckbox.setAttribute('class', 'lui-checkbox');
+        newCheckbox.innerHTML += '<input class="lui-checkbox__input" type="checkbox" id="' + uniqueFunds[i] + '" checked /><div class="lui-checkbox__check-wrap"><span class="lui-checkbox__check"></span><span class="lui-checkbox__check-text">' + uniqueFunds[i] + '</span></div>';
+
+        targetDiv.appendChild(newCheckbox); //Add checkbox to div
+
+        //Add a listener to trigger recalculate method every time something is toggled
+        targetDiv.getElementsByTagName("input")[i].addEventListener("click", recalculate);
+    }
+}
+
+//Function to recall related methods to rerender the chart with new data
 function recalculate() {
     var selectedYear = $("#year-selection").children("option:selected").val();
+    var fundDiv = document.getElementById("pie-fund-selection");
+
+    var ignoredFunds = [];
+
+    //Find unchecked boxes for fund selection, these will be ignored
+    for (var i = 0; i < uniqueFunds.length; i++) {
+        if (!fundDiv.getElementsByTagName("input")[i].checked) {
+            ignoredFunds.push(uniqueFunds[i]);
+        }
+    }
 
     console.log("selected: " + selectedYear);
+    console.log("ignored funds: " + ignoredFunds);
 
-    getData(selectedYear);
+    getData(selectedYear, ignoredFunds); //Refresh data using 'new' selections
 
-    setTimeout(() => { buildChart(); }, 250);
+    setTimeout(() => { buildChart(); }, 250); //Render the chart
 }

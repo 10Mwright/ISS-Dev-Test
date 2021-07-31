@@ -47,12 +47,16 @@ function findFunds(data) {
 }
 
 //Function to return an overall total of sales
-function calculateOverallTotal(data, selectedYear) {
+function calculateOverallTotal(data, selectedYear, ignoredFunds) {
     var total = 0;
 
+    console.log("ignored funds: " + ignoredFunds);
+
     data.forEach(element => {
-        if(element.year === selectedYear) 
-            total += parseInt(element.sales);
+        if(element.year === selectedYear) {
+            if($.inArray(element.fund, ignoredFunds) == -1) 
+                total += parseInt(element.sales);
+        }
     });
 
     return total;
