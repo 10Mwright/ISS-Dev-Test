@@ -47,6 +47,7 @@ function findFunds(data) {
 }
 
 //Function to get a map of unique attributes within the data
+////Source used: https://stackoverflow.com/questions/7431618/jquery-finding-distinct-values-in-object-array
 function getUniqueAttributes(data) {
     var uniqueAttributes = new Map();
 
@@ -57,7 +58,7 @@ function getUniqueAttributes(data) {
     return uniqueAttributes;
 }
 
-//Function to return an overall total of sales
+//Function to return an overall total of sales, to avoid duplicate calls to above methods
 function calculateOverallTotal(data, selectedYear, ignoredFunds) {
     var total = 0;
 

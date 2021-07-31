@@ -46,6 +46,7 @@ function getData(ignoredIfas, ignoredFunds) {
     });
 }
 
+//Function to build barchart using picasso.js
 function buildChart(ifas, funds) {
     picasso.chart({
         element: document.getElementById('charting').querySelector('#barchart'),
@@ -194,17 +195,18 @@ function recalculate() {
     //Find IFAs to ignore
     for(var i = 0; i < uniqueAttributes.get("ifas").length; i++) {
         if(!ifaDiv.getElementsByTagName("input")[i].checked)  {
-            ignoredIFA.push(uniqueAttributes.get("ifas")[i]);
+            ignoredIFA.push(uniqueAttributes.get("ifas")[i]); //Add to ignore list if unchecked
         } else {
-            includedIFA.push(uniqueAttributes.get("ifas")[i]);
+            includedIFA.push(uniqueAttributes.get("ifas")[i]); //Add to included list if checked
         }
     }
 
+    //Find Funds to ignore
     for(var i = 0; i < uniqueAttributes.get("Funds").length; i++) {
         if(!fundDiv.getElementsByTagName("input")[i].checked) {
-            ignoredFunds.push(uniqueAttributes.get("Funds")[i]);
+            ignoredFunds.push(uniqueAttributes.get("Funds")[i]); //Add to ignore list if unchecked
         } else {
-            includedFunds.push(uniqueAttributes.get("Funds")[i]);
+            includedFunds.push(uniqueAttributes.get("Funds")[i]); //Add to included list if checked
         }
     }
 
