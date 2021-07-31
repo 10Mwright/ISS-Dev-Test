@@ -8,7 +8,12 @@ document.getElementById('chart-tabs').querySelector('#pie-tab').addEventListener
     if (chartDiv.innerHTML == "") { //Avoids overwriting chart after user has first seen it
         getData("latest", [""]);
 
-        setTimeout(() => { buildChart(); setupYearSelection(); setupFundSelection(); }, 250);
+        setTimeout(() => { 
+            var defaultYear = uniqueAttributes.get("Years")[0]; //Default year is first in array
+            var defaultFunds = uniqueAttributes.get("Funds"); //Default funds (all)
+            buildChart(defaultYear, defaultFunds); 
+            setupYearSelection(); 
+            setupFundSelection(); }, 250);
     }
 });
 
@@ -25,17 +30,17 @@ function getData(selectedYear, ignoredFunds) {
         for (var i = 0; i < uniqueAttributes.get("ifas").length; i++) { //For each unique IFA
             var marketShare = 0;
 
-            var currentIFAData = data.filter(function (obj) { //Get IFAs data
-                return obj.ifa === uniqueAttributes.get("ifas")[i] && obj.year === selectedYear;
+            var currentIFAData = data.filter(function (obj) { //Get Relevant Data for each IFA
+                return obj.ifa === uniqueAttributes.get("ifas")[i] 
+                    && obj.year === selectedYear 
+                    && $.inArray(obj.fund, ignoredFunds) == -1;
             });
 
-            //For each row of data for this IFA calculated the total sales
-            for (var j = 0; j < currentIFAData.length; j++) {
-                if ($.inArray(currentIFAData[j].fund, ignoredFunds) == -1) {
-                    marketShare += parseInt(currentIFAData[j].sales);
-                }
-            }
+            currentIFAData.forEach(element => { //For each row of relevant data total up sales
+                marketShare += parseInt(element.sales);
+            });
 
+            //Market Share = sales / total sales * 100
             marketShare = (marketShare / salesTotal) * 100; //Calculate market share
 
             console.log("Market Share for: " + uniqueAttributes.get("ifas")[i] + " is " + marketShare);
@@ -50,7 +55,8 @@ function getData(selectedYear, ignoredFunds) {
     });
 }
 
-function buildChart() {
+//Function that builds Picasso.js chart
+function buildChart(chartYear, funds) {
     picasso.chart({
         element: chartDiv,
         data: [
@@ -68,19 +74,34 @@ function buildChart() {
                 type: 'legend-cat',
                 scale: 'c'
             }, {
-                key: 'p',
+                type: 'text',
+                text: 'Market Share for year ' + chartYear + ' of select Funds by IFA',
+                dock: 'top',
+                layout: { displayOrder: 2 },
+                style: {
+                    text: {
+                        fontSize: '150%',
+                    },
+                },
+            }, {
+                type: 'text',
+                text: 'Funds Included: ' + funds,
+                dock: 'top',
+                layout: { displayOrder: 1 }
+            }, {
+                key: 'segments',
                 type: 'pie',
                 data: {
                     extract: {
                         field: 'IFA',
                         props: {
-                            num: { field: 'Market Share' }
+                            share: { field: 'Market Share' }
                         }
                     }
                 },
                 settings: {
                     slice: {
-                        arc: { ref: 'num' },
+                        arc: { ref: 'share' },
                         fill: { scale: 'c' },
                         outerRadius: () => 0.9,
                         strokeWidth: 1,
@@ -133,12 +154,15 @@ function recalculate() {
     var selectedYear = $("#year-selection").children("option:selected").val();
     var fundDiv = document.getElementById("pie-fund-selection");
 
-    var ignoredFunds = [];
+    var ignoredFunds = []; 
+    var includedFunds = [];
 
     //Find unchecked boxes for fund selection, these will be ignored
     for (var i = 0; i < uniqueAttributes.get("Funds").length; i++) {
         if (!fundDiv.getElementsByTagName("input")[i].checked) {
             ignoredFunds.push(uniqueAttributes.get("Funds")[i]);
+        } else {
+            includedFunds.push(uniqueAttributes.get("Funds")[i]); //Add to included funds
         }
     }
 
@@ -147,5 +171,5 @@ function recalculate() {
 
     getData(selectedYear, ignoredFunds); //Refresh data using 'new' selections
 
-    setTimeout(() => { buildChart(); }, 250); //Render the chart
+    setTimeout(() => { buildChart(selectedYear, includedFunds); }, 250); //Render the chart
 }

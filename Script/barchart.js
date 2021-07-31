@@ -70,14 +70,49 @@ function buildChart() {
             },
             components: [
                 {
+                    type: 'text',
+                    text: 'Chart showing total sales of select IFAs in select Funds by Year',
+                    dock: 'top',
+                    style: {
+                        text: {
+                            fontSize: '150%',
+                        },
+                    },
+                }, {
+                }, {
                     type: 'axis',
                     scale: 'y',
                     dock: 'left'
                 },
                 {
+                    type: 'text',
+                    text: 'Total Sales (£)',
+                    dock: 'left',
+                },
+                {
                     type: 'axis',
                     scale: 't',
                     dock: 'bottom'
+                },
+                {
+                    type: 'text',
+                    text: 'Year',
+                    dock: 'bottom',
+                },
+                {
+                    type: 'grid-line',
+                    x: {
+                        scale: 'x'
+                    },
+                    y: {
+                        scale: 'y'
+                    },
+                    ticks: {
+                        show: true,
+                        stroke: 'grey',
+                        strokeWidth: 1,
+                        strokeDasharray: '3,3'
+                    }
                 },
                 {
                     key: 'bars',
@@ -98,7 +133,8 @@ function buildChart() {
                             fill: { scale: 'c', ref: 'end' }
                         }
                     }
-                }]
+                },
+            ]
         }
     });
 }
