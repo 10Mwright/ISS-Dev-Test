@@ -34,7 +34,7 @@ function getData(ignoredIfas, ignoredFunds) {
                 }
             }
 
-            console.log("Sales total for: " + uniqueYears[i][0] + " is " + total);
+            console.log("Sales total for: " + uniqueYears[i] + " is " + total);
             chartData.push([uniqueYears[i], total]);
             //uniqueYears[i][1] = total; //Commit sales total to 2d array
         }

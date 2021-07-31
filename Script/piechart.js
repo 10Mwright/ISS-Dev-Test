@@ -1,28 +1,27 @@
 var data = [];
 var chartData = [];
+var chartDiv = document.getElementById('pie').querySelector('#piechart');
 var uniqueYears, uniqueIFA, uniqueFunds = [];
 
 //Triggered when Pie Chart tab button is clicked, this is to allow the chart to render
 //as on initial page load the pie chart div is set to hidden.
 document.getElementById('chart-tabs').querySelector('#pie-tab').addEventListener("click", function () {
-    getData(null, [""]);
+    if (chartDiv.innerHTML == "") { //Avoids overwriting chart after user has first seen it
+        getData("latest", [""]);
 
-    setTimeout(() => { buildChart(); setupYearSelection(); setupFundSelection(); }, 250);
+        setTimeout(() => { buildChart(); setupYearSelection(); setupFundSelection(); }, 250);
+    }
 });
 
 //Gather relevant data
 function getData(selectedYear, ignoredFunds) {
-    console.log("test!");
     $.getJSON("Resources/dev_test.dat", data, function (data) {
-        //First get unique ifas, and get data on a per ifa basis
-        //Must calculate market share by dividing ifa's total sales by overall total
-        //Then work on filtering out years and funds
         uniqueIFA = findIFAS(data);
         uniqueYears = findYears(data);
         uniqueFunds = findFunds(data);
         chartData = [['IFA', 'Market Share']]; //Setup 2d array for chart
 
-        if (selectedYear == null) selectedYear = uniqueYears[0]; //Default value is first year
+        if (selectedYear === "latest") selectedYear = uniqueYears[0]; //Default value is first year
 
         var salesTotal = calculateOverallTotal(data, selectedYear, ignoredFunds);
 
@@ -56,7 +55,7 @@ function getData(selectedYear, ignoredFunds) {
 
 function buildChart() {
     picasso.chart({
-        element: document.getElementById('pie').querySelector('#piechart'),
+        element: chartDiv,
         data: [
             {
                 data: chartData,
@@ -108,14 +107,14 @@ function setupYearSelection() {
     }
 
     newSelect.addEventListener("change", recalculate); //Add a change listener, triggered when option is changed
-    targetDiv.innerHTML = ""; //Ensure multiple selects aren't added when page is revisted
+    //targetDiv.innerHTML = ""; //Ensure multiple selects aren't added when page is revisted
     targetDiv.appendChild(newSelect);
 }
 
 //Function to setup checkboxes for fund selection
 function setupFundSelection() {
     var targetDiv = document.getElementById("pie-fund-selection");
-    targetDiv.innerHTML = ""; //Empty target div, to avoid repeated checkboxes
+    //targetDiv.innerHTML = ""; //Empty target div, to avoid repeated checkboxes
 
     for (var i = 0; i < uniqueFunds.length; i++) { //Add each fund as a checkbox
         var newCheckbox = document.createElement("label");
