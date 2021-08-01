@@ -177,7 +177,7 @@ function buildChart(ifas, funds) {
                     labels: [
                       {
                         label({ data }) {
-                          return data ? data.end.label : "";
+                          return data ? data.end.label.toLocaleString('en') : "";
                         },
                         placements: [
                           { position: "inside", fill: "#fff" },
