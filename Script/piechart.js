@@ -135,38 +135,45 @@ function buildChart(chartYear, funds) {
           },
         },
         {
-            type: "labels",
-            layout: {
-              displayOrder: 2, // must be larger than the displayOrder for the 'bars' component
-            },
-            settings: {
-              sources: [
-                {
-                  component: "arcs",
-                  selector: "path",
-                  strategy: {
-                    type: "slice",
-                    settings: {
-                      direction: 'horizontal',
-                      fontFamily: "Helvetica",
-                      fontSize: 14,
-                      labels: [
-                        {
-                          label({ data }) {
-                            console.log("label: " + data.share.label);
-                            return data ? data.share.label + "%" : "";
-                          },
-                          placements: [
-                            { position: "into", fill: "#fff" },
-                          ],
+          type: "labels",
+          layout: {
+            displayOrder: 2,
+          },
+          settings: {
+            sources: [
+              {
+                component: "arcs",
+                selector: "path",
+                strategy: {
+                  type: "slice",
+                  settings: {
+                    direction: "horizontal",
+                    fontFamily: "Helvetica",
+                    fontSize: 14,
+                    labels: [
+                      {
+                        label({ data }) {
+                          console.log("label: " + data.share.label);
+                          return data
+                            //Formatting label to be more readable
+                            ? parseFloat(data.share.label / 100).toLocaleString(
+                                "en",
+                                {
+                                  style: "percent",
+                                  minimumFractionDigits: 2,
+                                }
+                              )
+                            : "";
                         },
-                      ],
-                    },
+                        placements: [{ position: "into", fill: "#fff" }],
+                      },
+                    ],
                   },
                 },
-              ],
-            },
+              },
+            ],
           },
+        },
       ],
     },
   });
