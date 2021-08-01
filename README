@@ -1,5 +1,7 @@
 Development test provided by ISS in support of my application for the graduate software developer role in Market Intelligence.
 
+*** Note: A hosted version of the code contained within the "main" branch is available at iss.mdwright.net ***
+
 Dependencies:
     -> Qlik Picasso.js
     -> Qlik Leonardo-ui
