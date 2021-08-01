@@ -120,16 +120,17 @@ function buildTable() {
     table.empty(); //Empty table to avoid duplicate values
 
     var titleRow = document.createElement("tr");
-    titleRow.innerHTML = '<th>IFA</th><th>Market Share</th>';
+    titleRow.innerHTML = '<th class="ms-table-header">IFA</th><th class="ms-table-header">Market Share</th>';
     table.append(titleRow); //Adding title row to table
 
     for(var i = 1; i < chartData.length; i++) { //For each row of chart data
         var newRow = document.createElement("tr");
+        newRow.setAttribute("class", "ms-table-row");
+
         var percentage = (parseFloat(chartData[i][1]) / 100).toLocaleString('en', 
             { style: 'percent', minimumFractionDigits: 2 }); //Conversion to percentage format
 
-
-        newRow.innerHTML = '<td>' + chartData[i][0] + '</td><td>' + percentage + '</td>' //Add values to new row
+        newRow.innerHTML = '<td class="ms-table-cell">' + chartData[i][0] + '</td><td class="ms-table-cell">' + percentage + '</td>' //Add values to new row
         table.append(newRow); //Add to table
     }
 }

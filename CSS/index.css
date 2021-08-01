@@ -40,6 +40,11 @@ html, body {
     float: left;
 }
 
+#ms-table, .ms-table-header, .ms-table-cell {
+    border: 1px solid black !important;
+    border-collapse: collapse;
+}
+
 .switch-label {
     margin-left: 1%;
 }
