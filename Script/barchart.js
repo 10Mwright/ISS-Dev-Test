@@ -164,6 +164,7 @@ function setupIFASelection() {
         targetDiv.appendChild(newCheckbox); //Add new checkbox element to div element
     }
 
+    //Below adapted from https://stackoverflow.com/a/42001152
     $("#bar-ifa-selection :input").on("change", function(e) {
         if($("#bar-ifa-selection :input:checked").length == 0 && !this.checked) {
             this.checked = true;
@@ -187,6 +188,7 @@ function setupFundSelection() {
         targetDiv.appendChild(newCheckbox); //Add new checkbox element to div element
     }
 
+    //Below adapted from https://stackoverflow.com/a/42001152
     $("#bar-fund-selection :input").on("change", function(e) {
         if($("#bar-fund-selection :input:checked").length == 0 && !this.checked) {
             this.checked = true;
