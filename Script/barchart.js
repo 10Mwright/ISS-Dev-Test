@@ -32,7 +32,7 @@ function getData(ignoredIfas, ignoredFunds) {
 
             //For each row of data for this year add to year's total sales
             for (var j = 0; j < currentYearData.length; j++) {
-                total += parseInt(currentYearData[j].sales);
+                total += parseFloat(currentYearData[j].sales);
             }
 
             console.log("Sales total for: " + currentYear + " is " + total);

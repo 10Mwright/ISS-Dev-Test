@@ -38,7 +38,7 @@ function getData(selectedYear, ignoredFunds) {
             });
 
             currentIFAData.forEach(element => { //For each row of relevant data total up sales
-                marketShare += parseInt(element.sales);
+                marketShare += parseFloat(element.sales);
             });
 
             //Market Share = sales / total sales * 100
@@ -117,10 +117,16 @@ function buildChart(chartYear, funds) {
 //Function to build table with data
 function buildTable() {
     var table = $("#ms-table");
+    table.empty();
+
+    var titleRow = document.createElement("tr");
+    titleRow.innerHTML = '<th>IFA</th><th>Market Share</th>';
+    table.append(titleRow);
 
     for(var i = 1; i < chartData.length; i++) { //For each row of chart data
         var newRow = document.createElement("tr");
-        var percentage = (parseFloat(chartData[i][1]) / 100).toLocaleString('en', { style: 'percent', minimumFractionDigits: 2 }); //Conversion to percentage format
+        var percentage = (parseFloat(chartData[i][1]) / 100).toLocaleString('en', 
+            { style: 'percent', minimumFractionDigits: 2 }); //Conversion to percentage format
 
 
         newRow.innerHTML = '<td>' + chartData[i][0] + '</td><td>' + percentage + '</td>'
@@ -188,5 +194,7 @@ function recalculate() {
 
     getData(selectedYear, ignoredFunds); //Refresh data using 'new' selections
 
-    setTimeout(() => { buildChart(selectedYear, includedFunds); }, 250); //Render the chart
+    setTimeout(() => { 
+        buildChart(selectedYear, includedFunds);
+        buildTable(); }, 250); //Render the chart
 }
