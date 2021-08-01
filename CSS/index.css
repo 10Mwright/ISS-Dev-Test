@@ -1,67 +1,69 @@
 @font-face {
-    font-family: "LUI icons";
-    src: url(../node_modules/leonardo-ui/dist/lui-icons.woff) format('woff'),
-       url(../node_modules/leonardo-ui/dist/lui-icons.ttf) format('truetype');
-  }
+  font-family: "LUI icons";
+  src: url(../node_modules/leonardo-ui/dist/lui-icons.woff) format("woff"),
+    url(../node_modules/leonardo-ui/dist/lui-icons.ttf) format("truetype");
+}
 
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 .chart-container {
-    width: 90%;
-    height: 90%;
-    position: relative;
+  width: 90%;
+  height: 90%;
+  position: relative;
 }
 
 .container {
-    margin: 7.5% auto 0 auto;
-    height: 50%;
-    width: 50%;
+  margin: 7.5% auto 0 auto;
+  height: 50%;
+  width: 50%;
 }
 
 #pie {
-    width: 60%;
+  width: 60%;
 }
 
 #piechart {
-    float: left;
-    width: 75%;
+  float: left;
+  width: 75%;
 }
 
 #pie-selection-area {
-    width: 75%;
+  width: 75%;
 }
 
 .pie-table {
-    width: 25%;
-    float: left;
-    overflow-x: auto;
+  width: 25%;
+  float: left;
+  overflow-x: auto;
 }
 
 #ms-table {
-    border: 1px solid black !important;
-    border-collapse: collapse;
+  border: 1px solid black !important;
+  border-collapse: collapse;
 }
 
-.ms-table-cell, .ms-table-header {
-    padding: 1%;
-    text-align: right;
-    border-bottom: 1px solid black;
+.ms-table-cell,
+.ms-table-header {
+  padding: 1%;
+  text-align: right;
+  border-bottom: 1px solid black;
 }
 
 .switch-label {
-    margin-left: 1%;
+  margin-left: 1%;
 }
 
 .lui-switch {
-    float: left;
+  float: left;
 }
 
 .selection-group {
-    width: 40%;
-    margin-right: 10%;
-    float: left;
+  width: 40%;
+  margin-right: 10%;
+  float: left;
 }

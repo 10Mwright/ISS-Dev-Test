@@ -155,8 +155,8 @@ function buildChart(chartYear, funds) {
                         label({ data }) {
                           console.log("label: " + data.share.label);
                           return data
-                            //Formatting label to be more readable
-                            ? parseFloat(data.share.label / 100).toLocaleString(
+                            ? //Formatting label to be more readable
+                              parseFloat(data.share.label / 100).toLocaleString(
                                 "en",
                                 {
                                   style: "percent",
