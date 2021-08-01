@@ -28,21 +28,27 @@ html, body {
 
 #piechart {
     float: left;
-    width: 70%;
+    width: 75%;
 }
 
 #pie-selection-area {
-    width: 60%;
+    width: 75%;
 }
 
 .pie-table {
-    width: 30%;
+    width: 25%;
     float: left;
 }
 
-#ms-table, .ms-table-header, .ms-table-cell {
+#ms-table {
     border: 1px solid black !important;
     border-collapse: collapse;
+}
+
+.ms-table-cell, .ms-table-header {
+    padding: 1%;
+    text-align: right;
+    border-bottom: 1px solid black;
 }
 
 .switch-label {
