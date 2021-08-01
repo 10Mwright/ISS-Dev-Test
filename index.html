@@ -20,13 +20,13 @@
 <body>
     <script src="Script/data-tools.js"></script>
 
-    <ul class="lui-tabset" data-tabset id="chart-tabs">
+    <ul class="lui-tabset lui-tabset--fill" data-tabset id="chart-tabs">
         <li class="lui-tab lui-active" data-tab-id="bar-chart">
-            <span class="lui-tab__text">Bar Chart</span>
+            <span class="lui-tab__text--large">Yearly Total Sales</span>
         </li>
 
         <li class="lui-tab" data-tab-id="pie-chart" id="pie-tab">
-            <span class="lui-tab__text">Pie Chart</span>
+            <span class="lui-tab__text--large">IFA Market Share By Year</span>
         </li>
     </ul>
 
@@ -44,11 +44,21 @@
 
     <div data-tab-content="pie-chart" class="container" id="pie" style="display: none;">
         <div class="chart-container" id="piechart"></div>
-        <div class="selection-group" id="pie-year-selection">
-            <h1>Choose a Year:</h1>
+        <div class="pie-table">
+            <table id="ms-table" style="width: 100%;">
+                <tr>
+                    <th>IFA</th>
+                    <th>Market Share</th>
+                </tr>
+            </table>
         </div>
-        <div class="selection-group" id="pie-fund-selection">
-            <h1>Fund Selection:</h1>
+        <div class="selection-area" id="pie-selection-area">
+            <div class="selection-group" id="pie-year-selection">
+                <h1>Choose a Year:</h1>
+            </div>
+            <div class="selection-group" id="pie-fund-selection">
+                <h1>Fund Selection:</h1>
+            </div>
         </div>
     </div>
 

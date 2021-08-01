@@ -17,9 +17,27 @@ html, body {
 }
 
 .container {
-    margin: 10% auto 0 auto;
+    margin: 7.5% auto 0 auto;
     height: 50%;
     width: 50%;
+}
+
+#pie {
+    width: 60%;
+}
+
+#piechart {
+    float: left;
+    width: 70%;
+}
+
+#pie-selection-area {
+    width: 60%;
+}
+
+.pie-table {
+    width: 30%;
+    float: left;
 }
 
 .switch-label {

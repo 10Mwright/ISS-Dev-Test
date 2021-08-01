@@ -12,6 +12,7 @@ document.getElementById('chart-tabs').querySelector('#pie-tab').addEventListener
             var defaultYear = uniqueAttributes.get("Years")[0]; //Default year is first in array
             var defaultFunds = uniqueAttributes.get("Funds"); //Default funds (all)
             buildChart(defaultYear, defaultFunds); 
+            buildTable();
             setupYearSelection(); 
             setupFundSelection(); }, 250);
     }
@@ -111,6 +112,22 @@ function buildChart(chartYear, funds) {
             }]
         }
     });
+}
+
+//Function to build table with data
+function buildTable() {
+    var table = $("#ms-table");
+
+    for(var i = 1; i < chartData.length; i++) { //For each row of chart data
+        var newRow = document.createElement("tr");
+        var percentage = (parseFloat(chartData[i][1]) / 100).toLocaleString('en', { style: 'percent', minimumFractionDigits: 2 }); //Conversion to percentage format
+
+
+        newRow.innerHTML = '<td>' + chartData[i][0] + '</td><td>' + percentage + '</td>'
+        table.append(newRow);
+    }
+
+    console.log(table.html());
 }
 
 //Function to setup selection box for year
