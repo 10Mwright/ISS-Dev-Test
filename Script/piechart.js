@@ -117,11 +117,11 @@ function buildChart(chartYear, funds) {
 //Function to build table with data
 function buildTable() {
     var table = $("#ms-table");
-    table.empty();
+    table.empty(); //Empty table to avoid duplicate values
 
     var titleRow = document.createElement("tr");
     titleRow.innerHTML = '<th>IFA</th><th>Market Share</th>';
-    table.append(titleRow);
+    table.append(titleRow); //Adding title row to table
 
     for(var i = 1; i < chartData.length; i++) { //For each row of chart data
         var newRow = document.createElement("tr");
@@ -129,16 +129,14 @@ function buildTable() {
             { style: 'percent', minimumFractionDigits: 2 }); //Conversion to percentage format
 
 
-        newRow.innerHTML = '<td>' + chartData[i][0] + '</td><td>' + percentage + '</td>'
-        table.append(newRow);
+        newRow.innerHTML = '<td>' + chartData[i][0] + '</td><td>' + percentage + '</td>' //Add values to new row
+        table.append(newRow); //Add to table
     }
-
-    console.log(table.html());
 }
 
 //Function to setup selection box for year
 function setupYearSelection() {
-    var targetDiv = document.getElementById("pie-year-selection");
+    var targetDiv = $("#pie-year-selection");
     var newSelect = document.createElement("select"); //Setup select box
     newSelect.setAttribute('class', 'lui-select');
     newSelect.setAttribute('id', 'year-selection');
@@ -150,7 +148,7 @@ function setupYearSelection() {
 
     newSelect.addEventListener("change", recalculate); //Add a change listener, triggered when option is changed
     //targetDiv.innerHTML = ""; //Ensure multiple selects aren't added when page is revisted
-    targetDiv.appendChild(newSelect);
+    targetDiv.append(newSelect);
 }
 
 //Function to setup checkboxes for fund selection
