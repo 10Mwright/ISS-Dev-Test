@@ -1,6 +1,38 @@
 Development test provided by ISS in support of my application for the graduate software developer role in Market Intelligence.
 
+*** Note: A hosted version of the code contained within the "main" branch is available at iss.mdwright.net ***
+
 Dependencies:
     -> Qlik Picasso.js
     -> Qlik Leonardo-ui
     -> JQuery
+
+Features Implemented:
+    -> A barchart view showing total sales of select funds by select IFAs, the user can check/uncheck boxes under the chart to 
+       alter the data used.
+    -> A piechart view showing market share ((sales/total sales) * 100) of each IFA within a select year, again funds included 
+       and the selected year can be altered using the fields.
+    -> A tabset view using Leonardo-UI to show each chart on a different view.
+    -> Prevention of unchecking all ifa/fund checkboxes to avoid empty charts.
+
+
+Potential future features/improvements:
+    -> One interesting feature would to have a year-on-year comparison of market share with the piechart, perhaps showing the 
+       relative increase/decrease between two years.
+    -> Some more styling options, little things like padding on axis/chart titles or consistent colouring of charts.
+    -> Perhaps an optional section detailing the dataset used to create each chart, for those users wanting to see it.
+    -> Alternative charts, simple charts such as total sales (across all years) of each IFA or Fund.
+        -> Could even have a chart showing sales of funds over the years, showing the trend of which fund(s) sell better over 
+           the years.
+
+
+Reflection on Project:
+It took a bit of time to get into the Qlik libraries, with which I had no prior experience with, and back into html, css and 
+javascript development in general but once I did the project went smoothly without many roadblocks. Given more time there are 
+a few things I'd work on with the project (including those additional features above) such as some small inefficiencies
+or questionable practices - one such instance would be the use of a timeout before the chart is rendered to ensure the 
+getData function has time to run, instead it'd be much cleaner and better practice to use a callback or deferred pattern 
+to run these functions asynchronously.
+
+Overall I have enjoyed working on this project and implementing some of the features, it's provided some great exposure to 
+html, css and javascript (especially JS where I have less experience).
