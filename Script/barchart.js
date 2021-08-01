@@ -162,9 +162,9 @@ function setupIFASelection() {
         newCheckbox.innerHTML += '<input class="lui-checkbox__input" type="checkbox" id="' + currentIFA + '" checked /><div class="lui-checkbox__check-wrap"><span class="lui-checkbox__check"></span><span class="lui-checkbox__check-text">' + currentIFA + '</span></div>';
 
         targetDiv.appendChild(newCheckbox); //Add new checkbox element to div element
-
-        targetDiv.getElementsByTagName("input")[i].addEventListener("click", recalculate); //Add onclick listener to new checkbox
     }
+
+    $("#bar-ifa-selection :input").on("change", recalculate); //Add event listeners to checkboxes
 }
 
 function setupFundSelection() {
@@ -178,9 +178,9 @@ function setupFundSelection() {
         newCheckbox.innerHTML += '<input class="lui-checkbox__input" type="checkbox" id="' + currentFund + '" checked /><div class="lui-checkbox__check-wrap"><span class="lui-checkbox__check"></span><span class="lui-checkbox__check-text">' + currentFund + '</span></div>';
 
         targetDiv.appendChild(newCheckbox); //Add new checkbox element to div element
-
-        targetDiv.getElementsByTagName("input")[i].addEventListener("click", recalculate); //Add onclick listener to new checkbox
     }
+
+    $("#bar-fund-selection").on("change", recalculate);
 }
 
 //Function to read unchecked boxes and recalculate totals on only checked elements.

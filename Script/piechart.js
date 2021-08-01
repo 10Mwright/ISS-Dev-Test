@@ -165,10 +165,9 @@ function setupFundSelection() {
         newCheckbox.innerHTML += '<input class="lui-checkbox__input" type="checkbox" id="' + currentFund + '" checked /><div class="lui-checkbox__check-wrap"><span class="lui-checkbox__check"></span><span class="lui-checkbox__check-text">' + currentFund + '</span></div>';
 
         targetDiv.appendChild(newCheckbox); //Add checkbox to div
-
-        //Add a listener to trigger recalculate method every time something is toggled
-        targetDiv.getElementsByTagName("input")[i].addEventListener("click", recalculate);
     }
+
+    $("#pie-fund-selection :input").on("change", recalculate); //Add listeners to checkboxes
 }
 
 //Function to recall related methods to rerender the chart with new data
