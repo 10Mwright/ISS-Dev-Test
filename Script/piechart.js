@@ -167,7 +167,14 @@ function setupFundSelection() {
         targetDiv.appendChild(newCheckbox); //Add checkbox to div
     }
 
-    $("#pie-fund-selection :input").on("change", recalculate); //Add listeners to checkboxes
+    $("#pie-fund-selection :input").on("change", function(e) {
+        if($("#pie-fund-selection :input:checked").length == 0 && !this.checked) {
+            this.checked = true;
+            recalculate();
+        } else {
+            recalculate();
+        }
+    }); //Add listeners to checkboxes
 }
 
 //Function to recall related methods to rerender the chart with new data

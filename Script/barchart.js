@@ -164,7 +164,14 @@ function setupIFASelection() {
         targetDiv.appendChild(newCheckbox); //Add new checkbox element to div element
     }
 
-    $("#bar-ifa-selection :input").on("change", recalculate); //Add event listeners to checkboxes
+    $("#bar-ifa-selection :input").on("change", function(e) {
+        if($("#bar-ifa-selection :input:checked").length == 0 && !this.checked) {
+            this.checked = true;
+            recalculate();
+        } else {
+            recalculate();
+        }
+    }); //Add listeners to checkboxes
 }
 
 function setupFundSelection() {
@@ -180,7 +187,14 @@ function setupFundSelection() {
         targetDiv.appendChild(newCheckbox); //Add new checkbox element to div element
     }
 
-    $("#bar-fund-selection").on("change", recalculate);
+    $("#bar-fund-selection :input").on("change", function(e) {
+        if($("#bar-fund-selection :input:checked").length == 0 && !this.checked) {
+            this.checked = true;
+            recalculate();
+        } else {
+            recalculate();
+        }
+    }); //Add listeners to checkboxes
 }
 
 //Function to read unchecked boxes and recalculate totals on only checked elements.
