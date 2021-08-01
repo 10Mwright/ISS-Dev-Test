@@ -17,9 +17,39 @@ html, body {
 }
 
 .container {
-    margin: 15% auto 0 auto;
+    margin: 7.5% auto 0 auto;
     height: 50%;
     width: 50%;
+}
+
+#pie {
+    width: 60%;
+}
+
+#piechart {
+    float: left;
+    width: 75%;
+}
+
+#pie-selection-area {
+    width: 75%;
+}
+
+.pie-table {
+    width: 25%;
+    float: left;
+    overflow-x: auto;
+}
+
+#ms-table {
+    border: 1px solid black !important;
+    border-collapse: collapse;
+}
+
+.ms-table-cell, .ms-table-header {
+    padding: 1%;
+    text-align: right;
+    border-bottom: 1px solid black;
 }
 
 .switch-label {
@@ -27,5 +57,11 @@ html, body {
 }
 
 .lui-switch {
+    float: left;
+}
+
+.selection-group {
+    width: 40%;
+    margin-right: 10%;
     float: left;
 }

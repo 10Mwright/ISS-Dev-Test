@@ -14,33 +14,51 @@
     <link rel="stylesheet" href="node_modules/leonardo-ui/dist/leonardo-ui.css" type="text/css" />
 
     <!-- JQuery Import -->
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
 </head>
 
 <body>
     <script src="Script/data-tools.js"></script>
 
-    <ul class="lui-tabset" data-tabset>
+    <ul class="lui-tabset lui-tabset--fill" data-tabset id="chart-tabs">
         <li class="lui-tab lui-active" data-tab-id="bar-chart">
-            <span class="lui-tab__text">Bar Chart</span>
+            <span class="lui-tab__text--large">Yearly Total Sales</span>
         </li>
 
-        <li class="lui-tab" data-tab-id="pie-chart">
-            <span class="lui-tab__text">Pie Chart</span>
+        <li class="lui-tab" data-tab-id="pie-chart" id="pie-tab">
+            <span class="lui-tab__text--large">IFA Market Share By Year</span>
         </li>
     </ul>
 
     <div data-tab-content="bar-chart" class="container" id="charting" style>
         <div class="chart-container" id="barchart"></div>
-        <div class="selection-group" id="bar-ifa-selection"></div>
-        <div class="selection-group" id="bar-fund-selection"></div>
-    </div>
-
-    <div data-tab-content="pie-chart" class="container" id="charting" style="display: none;">
-        <div class="chart-container" id="pie-chart"></div>
+        <div class="selection-group" id="bar-ifa-selection">
+            <h1>IFA Selection:</h1>
+        </div>
+        <div class="selection-group" id="bar-fund-selection">
+            <h1>Fund Selection:</h1>
+        </div>
     </div>
 
     <script type="module" src="Script/barchart.js"></script>
+
+    <div data-tab-content="pie-chart" class="container" id="pie" style="display: none;">
+        <div class="chart-container" id="piechart"></div>
+        <div class="pie-table">
+            <table id="ms-table" style="width: 100%;">
+            </table>
+        </div>
+        <div class="selection-area" id="pie-selection-area">
+            <div class="selection-group" id="pie-year-selection">
+                <h1>Choose a Year:</h1>
+            </div>
+            <div class="selection-group" id="pie-fund-selection">
+                <h1>Fund Selection:</h1>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="Script/piechart.js"></script>
 
     <script src="node_modules/leonardo-ui/dist/leonardo-ui.js" type="text/javascript"></script>
     <script>

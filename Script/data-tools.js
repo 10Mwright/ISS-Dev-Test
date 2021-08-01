@@ -18,12 +18,12 @@ function findIFAS(data) {
 //Source used: https://stackoverflow.com/questions/7431618/jquery-finding-distinct-values-in-object-array
 function findYears(data) {
     var duplicateYears = {};
-    var uniqueYears = [['Year', 'Sales']];
+    var uniqueYears = [];
 
     $.each(data, function(i, el) {
         if(!duplicateYears[el.year]) {
             duplicateYears[el.year] = true;
-            uniqueYears.push([el.year, 0]);
+            uniqueYears.push(el.year);
         }
     });
 
@@ -44,4 +44,30 @@ function findFunds(data) {
     });
 
     return uniqueFunds;
+}
+
+//Function to get a map of unique attributes within the data
+////Source used: https://stackoverflow.com/questions/7431618/jquery-finding-distinct-values-in-object-array
+function getUniqueAttributes(data) {
+    var uniqueAttributes = new Map();
+
+    uniqueAttributes.set("Years", findYears(data));
+    uniqueAttributes.set("ifas", findIFAS(data));
+    uniqueAttributes.set("Funds", findFunds(data));
+
+    return uniqueAttributes;
+}
+
+//Function to return an overall total of sales, to avoid duplicate calls to above methods
+function calculateOverallTotal(data, selectedYear, ignoredFunds) {
+    var total = 0;
+
+    data.forEach(element => {
+        if(element.year === selectedYear) {
+            if($.inArray(element.fund, ignoredFunds) == -1) 
+                total += parseInt(element.sales);
+        }
+    });
+
+    return total;
 }
